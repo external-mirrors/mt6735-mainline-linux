@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/*
+ * MT6735 with broken ATF implementation limited to 32-bit HLOS with no PSCI
+ *
+ * Copyright (c) 2021, Yassine Oudjana <y.oudjana@protonmail.com>
+ */
+
+#include "../../../../arm64/boot/dts/mediatek/mt6735.dtsi"
+
+/ {
+	/delete-node/ psci;
+};
+
+/* TODO: Implement SMP */
+&cpu0 {
+	/delete-property/ enable-method;
+	/delete-property/ cpu-release-addr;
+};
+
+&cpu1 {
+	/delete-property/ enable-method;
+	/delete-property/ cpu-release-addr;
+};
+
+&cpu2 {
+	/delete-property/ enable-method;
+	/delete-property/ cpu-release-addr;
+};
+
+&cpu3 {
+	/delete-property/ enable-method;
+	/delete-property/ cpu-release-addr;
+};
