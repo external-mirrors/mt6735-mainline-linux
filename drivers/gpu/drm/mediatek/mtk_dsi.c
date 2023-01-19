@@ -668,6 +668,9 @@ static s32 mtk_dsi_switch_to_cmd_mode(struct mtk_dsi *dsi, u8 irq_flag, u32 t)
 	mtk_dsi_set_cmd_mode(dsi);
 	struct drm_device *drm = dsi->bridge.dev;
 
+	/* Start DSI engine to initiate mode switch */
+	mtk_dsi_start(dsi);
+
 	if (!mtk_dsi_wait_for_irq_done(dsi, irq_flag, t)) {
 		drm_err(drm, "failed to switch cmd mode\n");
 		return -ETIME;
@@ -771,7 +774,6 @@ static void mtk_dsi_poweroff(struct mtk_dsi *dsi)
 	 */
 	mtk_dsi_stop(dsi);
 
-	mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
 	mtk_dsi_reset_engine(dsi);
 	mtk_dsi_lane0_ulp_mode_enter(dsi);
 	mtk_dsi_clk_ulp_mode_enter(dsi);
@@ -1137,9 +1139,12 @@ static ssize_t mtk_dsi_host_transfer(struct mipi_dsi_host *host,
 	dsi_mode = readl(dsi->regs + DSI_MODE_CTRL);
 	if (dsi_mode & MODE) {
 		mtk_dsi_stop(dsi);
-		ret = mtk_dsi_switch_to_cmd_mode(dsi, VM_DONE_INT_FLAG, 500);
+		ret = mtk_dsi_switch_to_cmd_mode(dsi, CMD_DONE_INT_FLAG |
+						 VM_DONE_INT_FLAG, 500);
 		if (ret)
 			goto restore_dsi_mode;
+
+		mtk_dsi_stop(dsi);
 	}
 
 	if (MTK_DSI_HOST_IS_READ(msg->type))
