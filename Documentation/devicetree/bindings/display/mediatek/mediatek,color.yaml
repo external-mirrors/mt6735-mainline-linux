@@ -24,6 +24,7 @@ properties:
     oneOf:
       - enum:
           - mediatek,mt2701-disp-color
+          - mediatek,mt6735-disp-color
           - mediatek,mt8167-disp-color
           - mediatek,mt8173-disp-color
           - mediatek,mt8195-mdp3-color
@@ -36,6 +37,9 @@ properties:
               - mediatek,mt7623-disp-color
               - mediatek,mt2712-disp-color
           - const: mediatek,mt2701-disp-color
+      - items:
+          - const: mediatek,mt6735-disp-color
+          - const: mediatek,mt8167-disp-color
       - items:
           - enum:
               - mediatek,mt6795-disp-color
