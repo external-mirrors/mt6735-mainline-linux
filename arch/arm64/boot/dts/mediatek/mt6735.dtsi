@@ -223,7 +223,7 @@
 					#power-domain-cells = <0>;
 				};
 
-				power-domain@MT6735_POWER_DOMAIN_VEN {
+				ven_pd: power-domain@MT6735_POWER_DOMAIN_VEN {
 					reg = <MT6735_POWER_DOMAIN_VEN>;
 					#power-domain-cells = <0>;
 				};

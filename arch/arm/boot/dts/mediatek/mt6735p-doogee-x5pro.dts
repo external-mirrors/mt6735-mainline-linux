@@ -1,0 +1,147 @@
+// SPDX-License-Identifier: BSD-3-Clause
+
+/dts-v1/;
+
+#include "mt6735-32bit.dtsi"
+#include "../../../../arm64/boot/dts/mediatek/mt6328.dtsi"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/pinctrl/mediatek,mt6735-pinctrl.h>
+
+/ {
+	model = "Doogee X5 Pro";
+	compatible = "doogee,x5pro", "mediatek,mt6735";
+
+	chosen {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		stdout-path = "framebuffer";
+
+		framebuffer: framebuffer@bf330000 {
+			compatible = "simple-framebuffer";
+			reg = <0 0xbf330000 0 0x1000000>;
+			width = <720>;
+			height = <1280>;
+			stride = <((720 + 16) * 4)>;
+			format = "a8r8g8b8";
+		};
+	};
+
+	memory@40000000 {
+		device_type = "memory";
+		reg = <0 0x40000000 0 0x3f000000>;
+	};
+
+	reserved-memory {
+		ramoops@43f10000 {
+			compatible = "ramoops";
+			reg = <0x0 0x43f10000 0x0 0x000e0000>;
+			no-map;
+
+			record-size = <0x00080000>;
+			console-size = <0x00010000>;
+			ftrace-size  = <0x00020000>;
+			pmsg-size    = <0x00010000>;
+		};
+
+		fb_mem: memory@bf330000 {
+			reg = <0 0xbf330000 0 0x1000000>;
+			no-map;
+		};
+	};
+
+	gpio-keys {
+		compatible = "gpio-keys";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpio_keys_default>;
+
+		key-volume-up {
+			label = "Volume Up";
+			linux,code = <KEY_VOLUMEUP>;
+			gpios = <&pio 85 GPIO_ACTIVE_LOW>;
+		};
+
+		key-home {
+			label = "Home";
+			linux,code = <KEY_HOME>;
+			gpios = <&pio 86 GPIO_ACTIVE_LOW>;
+		};
+	};
+};
+
+&mmc0 {
+	status = "okay";
+
+	vmmc-supply = <&mt6328_vemc33_reg>;
+	vqmmc-supply = <&mt6328_vio18_reg>;
+
+	bus-width = <8>;
+	max-frequency = <200000000>;
+	cap-mmc-highspeed;
+	mmc-ddr-1_8v;
+	mmc-hs200-1_8v;
+	mmc-hs400-1_8v;
+	non-removable;
+
+	mediatek,hs200-cmd-int-delay = <11>;
+	mediatek,hs400-cmd-int-delay = <6>;
+	mediatek,hs400-cmd-resp-sel-rising;
+	mediatek,hs400-ds-dly3 = <10>;
+	mediatek,latch-ck = <1>;
+};
+
+&mmc1 {
+	status = "okay";
+
+	vmmc-supply = <&mt6328_vmc_reg>;
+	vqmmc-supply = <&mt6328_vmch_reg>;
+
+	bus-width = <4>;
+	max-frequency = <200000000>;
+	cap-sd-highspeed;
+	sd-uhs-sdr12;
+	sd-uhs-sdr25;
+	sd-uhs-sdr50;
+	sd-uhs-sdr104;
+	sd-uhs-ddr50;
+
+	cd-gpios = <&pio 5 GPIO_ACTIVE_LOW>;
+};
+
+&pio {
+	gpio_keys_default: gpio-keys-default-pins {
+		pins-vol-down {
+			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>;
+		};
+
+		pins-home {
+			pinmux = <PINMUX_GPIO86__FUNC_GPIO86>;
+		};
+	};
+};
+
+&pwrap {
+	compatible = "mediatek,mt6735m-pwrap";
+	status = "okay";
+};
+
+&usb2 {
+	status = "okay";
+
+	usb_con: connector {
+		compatible = "usb-b-connector";
+		type = "micro";
+	};
+};
+
+&usb2phy {
+	status = "okay";
+};
+
+/* currently, power domain doesn't power on and fb console not showing up on
+ * the screen.
+ */
+/delete-node/ &ven_pd;
