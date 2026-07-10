@@ -155,13 +155,6 @@
 	status = "okay";
 };
 
-&spm {
-	/* currently, power domain doesn't power on and fb console not showing up on
-	* the screen.
-	*/
-	/delete-node/ power-domain@MT6735_POWER_DOMAIN_VEN;
-};
-
 &usb2 {
 	status = "okay";
 
