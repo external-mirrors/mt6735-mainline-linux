@@ -135,6 +135,16 @@
 			pinmux = <PINMUX_GPIO86__FUNC_GPIO86>;
 		};
 	};
+
+	touchscreen_default: touchscreen-default-pins {
+		pins-reset {
+			pinmux = <PINMUX_GPIO62__FUNC_GPIO62>;
+		};
+
+		pins-eint {
+			pinmux = <PINMUX_GPIO10__FUNC_GPIO10>;
+		};
+	};
 };
 
 &pwrap {
@@ -159,4 +169,21 @@
 
 &usb2phy {
 	status = "okay";
+};
+
+&i2c1 {
+	status = "okay";
+
+	touchscreen@38 {
+		compatible = "edt,edt-ft5206";
+		reg = <0x38>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&touchscreen_default>;
+		vcc-supply = <&mt6328_vgp1_reg>;
+		reset-gpios = <&pio 62 GPIO_ACTIVE_LOW>;
+		interrupt-parent = <&pio>;
+		interrupts = <10 IRQ_TYPE_EDGE_FALLING>;
+		touchscreen-size-x = <720>;
+		touchscreen-size-y = <1280>;
+	};
 };
