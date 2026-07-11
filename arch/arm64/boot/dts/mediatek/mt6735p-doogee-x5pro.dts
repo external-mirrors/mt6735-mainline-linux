@@ -63,13 +63,13 @@
 		key-volume-up {
 			label = "Volume Up";
 			linux,code = <KEY_VOLUMEUP>;
-			gpios = <&pio 85 GPIO_ACTIVE_LOW>;
+			gpios = <&pio 84 GPIO_ACTIVE_LOW>;
 		};
 
-		key-home {
-			label = "Home";
-			linux,code = <KEY_HOME>;
-			gpios = <&pio 86 GPIO_ACTIVE_LOW>;
+		key-volume-down {
+			label = "Volume Down";
+			linux,code = <KEY_VOLUMEDOWN>;
+			gpios = <&pio 85 GPIO_ACTIVE_LOW>;
 		};
 	};
 
@@ -125,14 +125,18 @@
 	cd-gpios = <&pio 5 GPIO_ACTIVE_LOW>;
 };
 
+&mt6328_keys {
+	status = "okay";
+};
+
 &pio {
 	gpio_keys_default: gpio-keys-default-pins {
-		pins-vol-down {
-			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>;
+		pins-vol-up {
+			pinmux = <PINMUX_GPIO84__FUNC_GPIO84>;
 		};
 
-		pins-home {
-			pinmux = <PINMUX_GPIO86__FUNC_GPIO86>;
+		pins-vol-down {
+			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>;
 		};
 	};
 
