@@ -7,6 +7,7 @@
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/pinctrl/mediatek,mt6735-pinctrl.h>
+#include <dt-bindings/leds/common.h>
 
 / {
 	model = "Doogee X5 Pro";
@@ -70,6 +71,17 @@
 			label = "Volume Down";
 			linux,code = <KEY_VOLUMEDOWN>;
 			gpios = <&pio 85 GPIO_ACTIVE_LOW>;
+		};
+	};
+
+	gpio-leds {
+		compatible = "gpio-leds";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gpio_leds_default>;
+
+		led-flashlight {
+			gpios = <&pio 43 GPIO_ACTIVE_HIGH>;
+			function = LED_FUNCTION_FLASH;
 		};
 	};
 
@@ -137,6 +149,12 @@
 
 		pins-vol-down {
 			pinmux = <PINMUX_GPIO85__FUNC_GPIO85>;
+		};
+	};
+
+	gpio_leds_default: gpio-leds-default-pins {
+		pins-flashlight {
+			pinmux = <PINMUX_GPIO43__FUNC_GPIO43>;
 		};
 	};
 
